@@ -2,9 +2,9 @@
 
 #include <iostream>
 
-const int DISPLAY_WIDTH  = 480;
+const int DISPLAY_WIDTH = 480;
 const int DISPLAY_HEIGHT = 320;
-const float UPDATE_INTERVAL = 1000.0f/60.0f;
+const float UPDATE_INTERVAL = 1000.0f / 60.0f;
 
 Game g_game; ///Singleton
 
@@ -18,17 +18,17 @@ void Game::draw()
 
     ///DIBUJO--------------------
     ///Dibujo de cubo
-    SDL_Rect CuboRect ;
+    SDL_Rect CuboRect;
     CuboRect.x = 10;
-    CuboRect.y = player.y ;
-    CuboRect.w = 15 ;
-    CuboRect.h = 60 ;
-    
-    SDL_Rect enemigo;
-    enemigo.x = 455;
-    enemigo.y = 160;
-    enemigo.w = 15;
-    enemigo.h = 60;
+    CuboRect.y = player.y;
+    CuboRect.w = 15;
+    CuboRect.h = 60;
+
+    SDL_Rect enemy;
+    enemy.x = 455;
+    enemy.y = enemigo.y;
+    enemy.w = 15;
+    enemy.h = 60;
 
     SDL_Rect bola;
     bola.x = 240;
@@ -40,10 +40,10 @@ void Game::draw()
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE); ///Seleccionamos el color Rojo //<-- Maquina de estado
     SDL_RenderFillRect(renderer, &CuboRect);///Dibujamos al jugador
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-    SDL_RenderFillRect(renderer, &enemigo);//Dibujamos el rival
+    SDL_RenderFillRect(renderer, &enemy);//Dibujamos el rival
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
     SDL_RenderFillRect(renderer, &bola);//Dibujamos el rival
-    
+
     /// Dibujar Punto SDL_RenderDrawPoint    https://wiki.libsdl.org/SDL_RenderDrawPoint
     /// Dibujar Linea SDL_RenderDrawLine    https://wiki.libsdl.org/SDL_RenderDrawLine
     /// Dibujar Lineas SDL_RenderDrawLines    https://wiki.libsdl.org/SDL_RenderDrawLines
@@ -63,16 +63,32 @@ void Game::draw()
 
 void Game::update()
 {
-    
-    if ( keys[SDLK_UP] || keys[SDLK_w]) //En sistemas operativos, Y esta inversa   Arriba es negativo y abajo es positivo,, 0,0 es esquina superior izquierdo
+
+    if (keys[SDLK_UP]) //En sistemas operativos, Y esta inversa   Arriba es negativo y abajo es positivo,, 0,0 es esquina superior izquierdo
     {
-        player.y -= player.speed ;
+        enemigo.y -= enemigo.speed;
+        if (enemigo.y < 0)
+            enemigo.y = 0;
+    }
+    else if (keys[SDLK_DOWN])
+    {
+        enemigo.y += enemigo.speed;
+
+        if (enemigo.y + 60 > DISPLAY_HEIGHT)
+        {
+            enemigo.y = DISPLAY_HEIGHT - 60;
+        }
+    }
+
+    if (keys[SDLK_w])
+    {
+        player.y -= player.speed;
         if (player.y < 0)
             player.y = 0;
     }
-    else if ( keys[SDLK_DOWN] || keys[SDLK_s])
+    else if (keys[SDLK_s])
     {
-        player.y += player.speed ;
+        player.y += player.speed;
 
         if (player.y + 60 > DISPLAY_HEIGHT)
         {
@@ -102,14 +118,14 @@ void Game::update()
 }
 
 ///TECLAS: https://www.libsdl.org/release/SDL-1.2.15/docs/html/sdlkey.html
-void Game::onKeyDown( SDL_Event* evt )
+void Game::onKeyDown(SDL_Event* evt)
 {
-    keys[ evt->key.keysym.sym ] = 1 ; ///Indicamos que ese tecla esta activa
+    keys[evt->key.keysym.sym] = 1; ///Indicamos que ese tecla esta activa
 }
 
-void Game::onKeyUp( SDL_Event* evt )
+void Game::onKeyUp(SDL_Event* evt)
 {
-    keys[ evt->key.keysym.sym ] = 0 ; ///Ya no se esta llamando la tecla
+    keys[evt->key.keysym.sym] = 0; ///Ya no se esta llamando la tecla
 }
 
 void Game::onMouse(SDL_Event* evt)
@@ -159,7 +175,7 @@ void Game::Init()
     anim_mona.AgregarImagen("Recursos/mona/der7.bmp");
     anim_mona.AgregarImagen("Recursos/mona/der8.bmp");
     anim_mona.SetFPS(6);
-    anim_mona.SetPos(100, 100);*/ 
+    anim_mona.SetPos(100, 100);*/
 }
 
 
@@ -168,7 +184,7 @@ void Game::onQuit()
 {
     //Mix_FreeMusic(msc_fondo);
 
-    running = 0 ;
+    running = 0;
 }
 
 
@@ -177,7 +193,7 @@ void Game::onQuit()
 
 
 ///NO CAMBIAR de aqui para abajo,  ---------------------------------------------------------------------------------
-Game::Game():frameSkip(0), running(0), window(NULL), renderer(NULL) {}
+Game::Game() :frameSkip(0), running(0), window(NULL), renderer(NULL) {}
 
 Game::~Game()
 {
@@ -186,7 +202,7 @@ Game::~Game()
 
 void Game::start() ///Inicializa vetana
 {
-    int flags = SDL_WINDOW_SHOWN ;
+    int flags = SDL_WINDOW_SHOWN;
     if (SDL_Init(SDL_INIT_EVERYTHING))
         return;
 
@@ -194,9 +210,9 @@ void Game::start() ///Inicializa vetana
         return;
 
     ///Cargamos la fuente para escribir
-    if( TTF_Init() == -1 )
+    if (TTF_Init() == -1)
     {
-        printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+        printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
         return;
     }
     gFont = TTF_OpenFont("Recursos/lazy.ttf", 12);
@@ -207,7 +223,7 @@ void Game::start() ///Inicializa vetana
         return;
     }
 
-    this->running = 1 ;
+    this->running = 1;
     run();
 }
 
@@ -232,64 +248,64 @@ void Game::run()
 {
     //Para calculo de FPS
     int past = SDL_GetTicks();
-    int now = past, pastFps = past ;
-    int fps = 0, framesSkipped = 0 ;
+    int now = past, pastFps = past;
+    int fps = 0, framesSkipped = 0;
 
-    SDL_Event event ; // Eventos => Eventos de ventana (Minimizar, maximar, cerrar, mover ventana) , Teclado y Raton
+    SDL_Event event; // Eventos => Eventos de ventana (Minimizar, maximar, cerrar, mover ventana) , Teclado y Raton
     Init();
     ///Ciclo de juego
-    while ( running )
+    while (running)
     {
-        int timeElapsed = 0 ;
+        int timeElapsed = 0;
         ///Eventos (Teclado y Mouse)
         if (SDL_PollEvent(&event)) //Oye SDL, hubo un evento?, si es así, procesalo
         {
             switch (event.type)
             {
-                case SDL_QUIT:    onQuit(); //X de la consola o de la ventana
-                    break;
-                case SDL_KEYDOWN: onKeyDown( &event );
-                    break ;
-                case SDL_KEYUP:   onKeyUp( &event );
-                    break ;
-                case SDL_MOUSEBUTTONDOWN:
-                case SDL_MOUSEBUTTONUP:
-                case SDL_MOUSEMOTION:
-                    onMouse( &event );
-                    break ;
+            case SDL_QUIT:    onQuit(); //X de la consola o de la ventana
+                break;
+            case SDL_KEYDOWN: onKeyDown(&event);
+                break;
+            case SDL_KEYUP:   onKeyUp(&event);
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+            case SDL_MOUSEBUTTONUP:
+            case SDL_MOUSEMOTION:
+                onMouse(&event);
+                break;
             }
         }
 
         ///Update y Draw
         ///Esta formula ayuda que corra ya suave, por lo que omite la necesidad de usar DeltaTime
-        timeElapsed = (now=SDL_GetTicks()) - past ;
-        if ( timeElapsed >= UPDATE_INTERVAL  )
+        timeElapsed = (now = SDL_GetTicks()) - past;
+        if (timeElapsed >= UPDATE_INTERVAL)
         {
-            past = now ; //Calculo cuando fue la ultima vez que mostre un frame
+            past = now; //Calculo cuando fue la ultima vez que mostre un frame
             update(); //Calculos de fisica y movimiento
-            if ( framesSkipped++ >= frameSkip )  // vsync
+            if (framesSkipped++ >= frameSkip)  // vsync
             {
                 draw(); //Dibujo la pantalla
-                ++fps ;
-                framesSkipped = 0 ;
+                ++fps;
+                framesSkipped = 0;
             }
         }
         /// fps
-        if ( now - pastFps >= 1000 )
+        if (now - pastFps >= 1000)
         {
-            pastFps = now ;
-            fpsChanged( fps );
-            fps = 0 ;
+            pastFps = now;
+            fpsChanged(fps);
+            fps = 0;
         }
         ///Retraso de 1ms o SDL se congela
-        SDL_Delay( 1 );
+        SDL_Delay(1);
     }
 }
 
-void Game::fpsChanged( int fps )
+void Game::fpsChanged(int fps)
 {
-    char szFps[ 128 ] ;
-    sprintf_s( szFps, "%s: %d FPS", "Nombre de Ventana", fps );
+    char szFps[128];
+    sprintf_s(szFps, "%s: %d FPS", "Nombre de Ventana", fps);
     SDL_SetWindowTitle(window, szFps);
 }
 
@@ -306,5 +322,5 @@ void Game::fpsChanged( int fps )
         Mix_PauseMusic();
     }*/
 
-//Stop
-//Mix_HaltMusic();
+    //Stop
+    //Mix_HaltMusic();
