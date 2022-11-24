@@ -1,2 +1,3 @@
-﻿  Game.cpp
-  SDL_Template.vcxproj -> D:\Archivos de programas\Bus\Pong\x64\Debug\SDL_Template.exe
+﻿  Pelota.cpp
+C:\Users\ivan_\Desktop\Pong\SDL_Template\Pelota.cpp(63,31): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+  SDL_Template.vcxproj -> C:\Users\ivan_\Desktop\Pong\x64\Debug\SDL_Template.exe

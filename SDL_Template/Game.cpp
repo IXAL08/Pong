@@ -2,9 +2,7 @@
 
 #include <iostream>
 
-const int DISPLAY_WIDTH = 480;
-const int DISPLAY_HEIGHT = 320;
-const float UPDATE_INTERVAL = 1000.0f / 60.0f;
+
 
 Game g_game; ///Singleton
 
@@ -30,19 +28,14 @@ void Game::draw()
     enemy.w = 15;
     enemy.h = 60;
 
-    SDL_Rect bola;
-    bola.x = 240;
-    bola.y = 160;
-    bola.w = 20;
-    bola.h = 20;
+ 
 
 
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE); ///Seleccionamos el color Rojo //<-- Maquina de estado
     SDL_RenderFillRect(renderer, &CuboRect);///Dibujamos al jugador
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
     SDL_RenderFillRect(renderer, &enemy);//Dibujamos el rival
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-    SDL_RenderFillRect(renderer, &bola);//Dibujamos el rival
+   
 
     /// Dibujar Punto SDL_RenderDrawPoint    https://wiki.libsdl.org/SDL_RenderDrawPoint
     /// Dibujar Linea SDL_RenderDrawLine    https://wiki.libsdl.org/SDL_RenderDrawLine
@@ -54,7 +47,7 @@ void Game::draw()
 
     ///Dibujar imagen
     //img.Dibujar();
-
+    bola.Dibujar();
     //anim_mona.Dibujar(delta);
 
     ///Terminamos de dibujar
@@ -63,7 +56,8 @@ void Game::draw()
 
 void Game::update()
 {
-
+    bola.Mover(delta);
+    
     if (keys[SDLK_UP]) //En sistemas operativos, Y esta inversa   Arriba es negativo y abajo es positivo,, 0,0 es esquina superior izquierdo
     {
         enemigo.y -= enemigo.speed;
@@ -95,6 +89,8 @@ void Game::update()
             player.y = DISPLAY_HEIGHT - 60;
         }
     }
+
+    
 
     unsigned int tiempoActual = SDL_GetTicks(); //Tomamos el tiempo actual en este frame,, le toma aprox 49 días dar la vuela (que vuelva desde 0)
     delta = (tiempoActual - tick_frameAnterior) / 1000.0f; // Convertimos milisengundos a segundos
@@ -164,6 +160,8 @@ void Game::Init()
 
     snd_coin.Cargar("Recursos/smb_coin.wav");
     snd_up.Cargar("Recursos/smb_1-up.wav");
+
+    
 
     //Cargamos animacion mona corriendo a la derecha
     /*anim_mona.AgregarImagen("Recursos/mona/der1.bmp");

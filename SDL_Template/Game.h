@@ -11,6 +11,11 @@
 #include "Texto.h"
 #include "Audio.h"
 #include "Animacion.h" //Imagen.h
+#include "Pelota.h"
+
+const int DISPLAY_WIDTH = 480;
+const int DISPLAY_HEIGHT = 320;
+const float UPDATE_INTERVAL = 1000.0f / 60.0f;
 
 class Game
 {
@@ -29,6 +34,8 @@ class Game
         void update();
         void draw();
 
+        Sprite player, enemigo;
+        Pelota bola;
         SDL_Renderer* renderer; //La hoja donde podemos dibujar
         TTF_Font *gFont = NULL; ///Fuente global
 private:
@@ -37,7 +44,7 @@ private:
         int running ;
         SDL_Window* window;
 
-        Sprite player, enemigo, bola;
+        
         Imagen img;
         Texto txt_hola;
         unsigned int img_tiempo; //Controlar que la imagen se dibuje despues de 3 segundos de estar jugando

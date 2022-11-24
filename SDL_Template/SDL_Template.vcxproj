@@ -130,6 +130,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Imagen.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Pelota.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Texto.cpp" />
   </ItemGroup>
@@ -138,6 +139,7 @@
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Imagen.h" />
+    <ClInclude Include="Pelota.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Texto.h" />
   </ItemGroup>
