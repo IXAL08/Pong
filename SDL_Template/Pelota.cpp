@@ -1,5 +1,4 @@
 #include "Pelota.h"
-
 #include "Game.h" //  g_game
 
 Pelota::Pelota()
@@ -24,8 +23,8 @@ void Pelota::Dibujar()
 void Pelota::Reiniciar()
 {
     SetPos((DISPLAY_WIDTH/2), (DISPLAY_HEIGHT/2));
-    velocidadX = 0.0f;
-    velocidadY = 1.0f;
+    velocidadX = -1.0f;
+    velocidadY = -1.0f;
 }
 
 void Pelota::Mover(float _delta)
@@ -36,15 +35,19 @@ void Pelota::Mover(float _delta)
     posX += velocidadX;
     posY += velocidadY;
 
-    // Ya colisione con un jugador? Esto te sirve para colisionar pero solo detecta a uno y en eje x
-    /*if (posX < g_game.player.x + 20)
+    // Ya colisione con un jugador? 
+    if (posX <= g_game.player.x + 20 && (posY >= g_game.player.y && posY <= (g_game.player.y + 60)))
     {
         velocidadX = -velocidadX;
-    }*/
-    if (posY == g_game.player.y)
-    {
-        velocidadY = -velocidadY;
     }
+
+    
+    if (posX > g_game.enemigo.x + 436 && (posY >= g_game.enemigo.y && posY <= (g_game.enemigo.y + 60)))
+    {
+        velocidadX = -velocidadX;
+    }
+    
+    
 
 
     // Derecha
