@@ -17,16 +17,17 @@ public:
     void SetY(float _y);
     void SetActivo(bool _v);
     bool GetActivo();
+    float posX;
+    float posY;
+    SDL_Rect rect; // Posicion
 
 protected:
 
 private:
 
-    SDL_Rect rect; // Posicion
     bool estaActivado;
 
-    float posX;
-    float posY;
+    
     float velocidadX; // Velocidad
     float velocidadY;
 };

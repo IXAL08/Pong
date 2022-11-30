@@ -54,11 +54,15 @@ void Pelota::Mover(float _delta)
     if (posX + rect.w > DISPLAY_WIDTH) 
     {
         Reiniciar(); // Invertir velocidad en X
+        velocidadX = -velocidadX;
+        velocidadY = -velocidadY;
     }
     //Izquierda
     if (posX < 0)
     {
         Reiniciar();
+        velocidadX = -velocidadX;
+        velocidadY = -velocidadY;
     }
     //Abajo
     if (posY + rect.h > DISPLAY_HEIGHT) 

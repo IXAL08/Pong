@@ -1,10 +1,12 @@
 #include "Game.h"
 
 #include <iostream>
+#include <string>
 
 
 
 Game g_game; ///Singleton
+int MarcadorA = 0, MarcadorB = 0;
 
 void Game::draw()
 {
@@ -43,8 +45,13 @@ void Game::draw()
     ///Dibujar Cuadros sin relleno SDL_RenderDrawRect   https://wiki.libsdl.org/SDL_RenderDrawRect
 
     ///Dibujar texto
-    //txt_hola.Dibujar();
+    std::string TextoImp = " : ";
+    TextoImp = to_string(MarcadorA) + TextoImp + to_string(MarcadorB);
+    txt_hola.SetText(TextoImp.c_str(), 255, 255, 255);
+    txt_hola.SetPos(218, 5);
+    txt_hola.Dibujar();
 
+    
     ///Dibujar imagen
     //img.Dibujar();
     bola.Dibujar();
@@ -90,6 +97,14 @@ void Game::update()
         }
     }
 
+    if (bola.posX <= 0 )
+    {
+        MarcadorB++;
+    }
+    else if(bola.posX >= 460) {
+
+        MarcadorA++;
+    }
     
 
     unsigned int tiempoActual = SDL_GetTicks(); //Tomamos el tiempo actual en este frame,, le toma aprox 49 días dar la vuela (que vuelva desde 0)
@@ -102,13 +117,13 @@ void Game::update()
             img.SetActivo(true);
         }
     }
-    if (txt_hola.GetActivo() == true)
+    /*if (txt_hola.GetActivo() == true)
     {
         if (tiempoActual >= txt_hola_timepo)
         {
             txt_hola.SetActivo(false);
         }
-    }
+    }*/
 
     tick_frameAnterior = tiempoActual; // Guardamos el valor actual del tick
 }
@@ -130,9 +145,9 @@ void Game::onMouse(SDL_Event* evt)
     {
         if (evt->button.button == SDL_BUTTON_LEFT) //Si con el clik izquierdo
         {
-            txt_hola.SetPos(evt->motion.x, evt->motion.y);
+            /*txt_hola.SetPos(evt->motion.x, evt->motion.y);
             txt_hola.SetActivo(true);
-            txt_hola_timepo = SDL_GetTicks() + 3000; //Solo quiero que se dibuje por 3 segundos (El tiempo esta en milisegundos)
+            txt_hola_timepo = SDL_GetTicks() + 3000;*/ //Solo quiero que se dibuje por 3 segundos (El tiempo esta en milisegundos)
 
             snd_coin.Play();
         }
@@ -150,7 +165,8 @@ void Game::Init()
     txt_hola.SetPos(20, DISPLAY_HEIGHT - 30);
 
     img.SetActivo(false);
-    txt_hola.SetActivo(false);
+    //txt_hola.SetActivo(false);
+    txt_hola.SetActivo(true);
     //Las variables de manejar , hay que tomarlas hasta el final de Init
     img_tiempo = SDL_GetTicks(); //Totamos el tiempo actual
 
